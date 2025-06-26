@@ -10,5 +10,6 @@ public class BridgeManageSystemApplication {
         SpringApplication.run(BridgeManageSystemApplication.class, args);
     }
 
+    //第一次测试
 
 }
