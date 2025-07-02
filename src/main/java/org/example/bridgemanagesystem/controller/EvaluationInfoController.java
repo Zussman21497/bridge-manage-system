@@ -1,12 +1,16 @@
 package org.example.bridgemanagesystem.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.example.bridgemanagesystem.test.Test_bridge;
+import org.springframework.web.bind.annotation.*;
 
 import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.*;
 
 
 @RestController
+@Slf4j
 public class EvaluationInfoController {
+
     public Double count_bridge_BCI(){
         double BCI;
         double BCIm = 0; //桥面系BCI
@@ -22,5 +26,32 @@ public class EvaluationInfoController {
                 SUPERSTRUCTURE_WEIGHT_1*BCIx;
 
         return BCI;
+    }
+
+    /**
+     * 根据桥梁 ID 查询技术状况表
+     * @param id
+     */
+    @GetMapping("/technology/info/search/{id}")
+    public void searchEvaluationInfo(@PathVariable String id){
+        log.info("查询的桥梁的ID为:{}",id);
+    }
+
+    /**
+     * 新添桥梁技术状况表
+     * @param testBridge
+     */
+    @PostMapping("/technology/info/add")
+    public void addEvaluationInfo(@RequestBody Test_bridge testBridge){
+        log.info("添加桥梁技术状况评估表:{}",testBridge);
+    }
+
+    /**
+     * 更新桥梁技术状况表信息
+     * @param testBridge
+     */
+    @PutMapping("/technology/info/update")
+    public void updateEvaluationInfo(@RequestBody Test_bridge testBridge){
+        log.info("原桥梁技术状况信息:{}",testBridge);
     }
 }
