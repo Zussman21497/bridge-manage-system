@@ -1,6 +1,9 @@
 package org.example.bridgemanagesystem.service;
 
-public interface EvaluationInfoService {
+import com.baomidou.mybatisplus.extension.service.IService;
+import org.example.bridgemanagesystem.entity.EvaluationInfo;
+
+public interface EvaluationInfoService extends IService<EvaluationInfo> {
     /*
     计算整个桥的BCI值
      */
