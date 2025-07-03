@@ -1,16 +1,15 @@
 package org.example.bridgemanagesystem.service.impl;
 
+import org.example.bridgemanagesystem.entity.EvaluationInfo;
 import org.example.bridgemanagesystem.service.EvaluationInfoService;
-import org.example.bridgemanagesystem.test.Test_bridge;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EvaluationInfoServiceImpl implements EvaluationInfoService
 {
-    Test_bridge t=new Test_bridge();
-
     @Override
-    public double count_bridge_deck_weight() {
-        int BCI;
-
-        return 0;
+    public EvaluationInfo getById(String id) {
+        //TODO:写数据库的查询语句
+        return null;
     }
 }

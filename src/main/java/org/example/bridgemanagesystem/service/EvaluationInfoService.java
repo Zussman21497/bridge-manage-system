@@ -1,8 +1,14 @@
 package org.example.bridgemanagesystem.service;
 
+import org.example.bridgemanagesystem.entity.EvaluationInfo;
+
 public interface EvaluationInfoService {
-    /*
-    计算整个桥的BCI值
+
+    /**
+     * 根据id查询技术状况数据
+     * @param id
+     * @return
      */
-    double count_bridge_deck_weight();
+    EvaluationInfo getById(String id);
+
 }
