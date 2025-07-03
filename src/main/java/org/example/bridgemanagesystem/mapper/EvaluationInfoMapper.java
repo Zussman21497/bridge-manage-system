@@ -6,4 +6,6 @@ import org.example.bridgemanagesystem.entity.EvaluationInfo;
 
 @Mapper
 public interface EvaluationInfoMapper extends BaseMapper<EvaluationInfo> {
+
 }
+

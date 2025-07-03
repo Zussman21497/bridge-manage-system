@@ -1,29 +1,53 @@
 package org.example.bridgemanagesystem.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.bridgemanagesystem.test.Test_bridge;
+import org.example.bridgemanagesystem.entity.EvaluationInfo;
+import org.example.bridgemanagesystem.service.EvaluationInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.*;
 
 
 @RestController
+@RequestMapping("/technology/info")
 @Slf4j
 public class EvaluationInfoController {
 
-    public Double count_bridge_BCI(){
-        double BCI;
+    @Autowired
+    private EvaluationInfoService evaluationInfoService;
+
+    /**
+     * 计算整个桥的BCI值
+     * @param id
+     * @return
+     */
+    public Double count_bridge_BCI(String id){
+        double BCI=0;
         double BCIm = 0; //桥面系BCI
         double BCIs = 0; //上部结构BCI
         double BCIx = 0; //下部结构BCI
 
         /*
-        TODO:之后这里要判断桥的类型,选择不同的权重值计算
-        以情况而定是否需要计算BCImsx的值
+        TODO:以情况而定计算BCImsx的值
+        TODO:这个ID到时候从数据库里面查对应的桥梁分类
          */
-        BCI=BRIDGE_DECK_SYSTEM_WEIGHT_1*BCIm+
-                SUBSTRUCTURE_WEIGHT_1*BCIs+
-                SUPERSTRUCTURE_WEIGHT_1*BCIx;
+        if (id=="人行天桥"){
+            BCI=BCIm*BRIDGE_DECK_SYSTEM_WEIGHT_R+
+                    BCIs*SUPERSTRUCTURE_WEIGHT_R+
+                    BCIx*SUBSTRUCTURE_WEIGHT_R;
+        }else {
+            if(id=="拱桥"){
+                BCI=BCIm*BRIDGE_DECK_SYSTEM_WEIGHT_G+
+                        BCIs*SUPERSTRUCTURE_WEIGHT_G+
+                        BCIx*SUBSTRUCTURE_WEIGHT_G;
+            }
+            else {
+                BCI=BCIm*BRIDGE_DECK_SYSTEM_WEIGHT_E+
+                        BCIs*SUPERSTRUCTURE_WEIGHT_E+
+                        BCIx*SUBSTRUCTURE_WEIGHT_E;
+            }
+        }
 
         return BCI;
     }
@@ -32,9 +56,10 @@ public class EvaluationInfoController {
      * 根据桥梁 ID 查询技术状况表
      * @param id
      */
-    @GetMapping("/technology/info/search/{id}")
+    @GetMapping("/search/{id}")
     public void searchEvaluationInfo(@PathVariable String id){
         log.info("查询的桥梁的ID为:{}",id);
+        EvaluationInfo evaluationInfo=evaluationInfoService.getById(id);
     }
 
 
@@ -42,19 +67,19 @@ public class EvaluationInfoController {
 
     /**
      * 新添桥梁技术状况表
-     * @param testBridge
+     * @param
      */
-    @PostMapping("/technology/info/add")
-    public void addEvaluationInfo(@RequestBody Test_bridge testBridge){
-        log.info("添加桥梁技术状况评估表:{}",testBridge);
+    @PostMapping("/add")
+    public void addEvaluationInfo(@RequestBody EvaluationInfo evaluationInfo){
+        log.info("添加桥梁技术状况评估表:{}",evaluationInfo);
     }
 
     /**
      * 更新桥梁技术状况表信息
-     * @param testBridge
+     * @param
      */
-    @PutMapping("/technology/info/update")
-    public void updateEvaluationInfo(@RequestBody Test_bridge testBridge){
-        log.info("原桥梁技术状况信息:{}",testBridge);
+    @PutMapping("/update")
+    public void updateEvaluationInfo(@RequestBody EvaluationInfo evaluationInfo){
+        log.info("原桥梁技术状况信息:{}",evaluationInfo);
     }
 }
