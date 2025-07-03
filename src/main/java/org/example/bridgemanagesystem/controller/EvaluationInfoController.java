@@ -37,6 +37,9 @@ public class EvaluationInfoController {
         log.info("查询的桥梁的ID为:{}",id);
     }
 
+
+
+
     /**
      * 新添桥梁技术状况表
      * @param testBridge
