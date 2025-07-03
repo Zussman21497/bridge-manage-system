@@ -6,7 +6,7 @@ import org.example.bridgemanagesystem.entity.BridgeSuperstructure;
 public interface BridgeSuperstructureService extends IService<BridgeSuperstructure> {
 
     /**
-     * 根据名字查询上部结构
+     * 根据桥梁名称查询上部结构
      * @param bridgeName
      * @return
      */
