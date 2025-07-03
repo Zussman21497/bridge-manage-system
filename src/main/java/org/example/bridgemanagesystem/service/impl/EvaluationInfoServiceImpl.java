@@ -1,15 +1,19 @@
 package org.example.bridgemanagesystem.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.bridgemanagesystem.entity.EvaluationInfo;
+import org.example.bridgemanagesystem.mapper.EvaluationInfoMapper;
 import org.example.bridgemanagesystem.service.EvaluationInfoService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EvaluationInfoServiceImpl implements EvaluationInfoService
+public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,EvaluationInfo> implements EvaluationInfoService
 {
+
     @Override
-    public EvaluationInfo getById(String id) {
-        //TODO:写数据库的查询语句
-        return null;
+    public double count_bridge_deck_weight() {
+        int BCI;
+
+        return 0;
     }
 }
