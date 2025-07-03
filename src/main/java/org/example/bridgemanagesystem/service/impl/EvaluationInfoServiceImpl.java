@@ -13,6 +13,7 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
     @Override
     public double count_bridge_deck_weight() {
         int BCI;
+        //11111
 
         return 0;
     }
