@@ -1,13 +1,16 @@
 package org.example.bridgemanagesystem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.bridgemanagesystem.entity.BridgeNormalInfo;
 import org.example.bridgemanagesystem.entity.EvaluationInfo;
 import org.example.bridgemanagesystem.mapper.EvaluationInfoMapper;
+import org.example.bridgemanagesystem.service.BridgeNormalInfoService;
 import org.example.bridgemanagesystem.service.EvaluationInfoService;
 
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.*;
@@ -25,9 +28,13 @@ import static org.example.bridgemanagesystem.commondata.SuperstructureBCICommonD
 public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,EvaluationInfo> implements EvaluationInfoService
 {
 
-    BridgeNormalInfo b=new BridgeNormalInfo();
+    @Autowired
+    private  EvaluationInfoService evaluationInfoService;
+
+
     /**
      * 桥面系BCI计算
+     * @param id
      * @return
      */
     @Override
@@ -54,6 +61,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCIm;
     }
 
+    /**
+     * 上部结构BCI计算
+     * @param id
+     * @return
+     */
     @Override
     public double count_superstructure_bci(String id) {
         double BCIs;
@@ -72,6 +84,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCIs;
     }
 
+    /**
+     * 下部结构BCI计算
+     * @param id
+     * @return
+     */
     @Override
     public double count_substructure_bci(String id) {
         double BCIx;
@@ -98,6 +115,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCIx;
     }
 
+    /**
+     * 整桥 BCI值
+     * @param id
+     * @return
+     */
     @Override
     public double count_bridge_BCI(String id) {
         double BCI=0;
@@ -128,9 +150,19 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCI;
     }
 
+
+    /**
+     * 通过桥梁名称查询对应的技术状况
+     * @param bridgeName
+     * @return
+     */
+    @Autowired
+    BridgeNormalInfoServiceImpl b;
     @Override
     public EvaluationInfo getByName(String bridgeName) {
-        return null;
+        BridgeNormalInfo info = b.getInfoByName(bridgeName);
+        String id=info.getBridgeId();
+        return evaluationInfoService.getById(id);
     }
 
 
