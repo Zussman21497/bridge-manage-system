@@ -30,7 +30,8 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
 
     @Autowired
     private  EvaluationInfoService evaluationInfoService;
-
+    @Autowired
+    BridgeNormalInfoServiceImpl b;
 
     /**
      * 桥面系BCI计算
@@ -156,14 +157,16 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
      * @param bridgeName
      * @return
      */
-    @Autowired
-    BridgeNormalInfoServiceImpl b;
     @Override
     public EvaluationInfo getByName(String bridgeName) {
         BridgeNormalInfo info = b.getInfoByName(bridgeName);
         String id=info.getBridgeId();
-        return evaluationInfoService.getById(id);
+        QueryWrapper<EvaluationInfo> wrapper=new QueryWrapper<EvaluationInfo>()
+                .eq("bridge_id",id);
+        return evaluationInfoService.getBaseMapper().selectOne(wrapper);
     }
+
+
 
 
 }
