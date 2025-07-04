@@ -1,5 +1,6 @@
 package org.example.bridgemanagesystem.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 /*
   技术状况评估表
  */
+@TableName("tech_status_evaluation")
 public class EvaluationInfo {
     private String evaluationRecordId;    // 评估记录ID
     private String bridgeId;              // 桥梁ID

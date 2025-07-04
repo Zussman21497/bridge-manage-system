@@ -28,6 +28,7 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
     BridgeNormalInfo b=new BridgeNormalInfo();
     /**
      * 桥面系BCI计算
+     * @param id
      * @return
      */
     @Override
@@ -54,6 +55,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCIm;
     }
 
+    /**
+     * 上部结构BCI计算
+     * @param id
+     * @return
+     */
     @Override
     public double count_superstructure_bci(String id) {
         double BCIs;
@@ -72,6 +78,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCIs;
     }
 
+    /**
+     * 下部结构BCI计算
+     * @param id
+     * @return
+     */
     @Override
     public double count_substructure_bci(String id) {
         double BCIx;
@@ -98,6 +109,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCIx;
     }
 
+    /**
+     * 整桥 BCI值
+     * @param id
+     * @return
+     */
     @Override
     public double count_bridge_BCI(String id) {
         double BCI=0;
@@ -128,6 +144,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return BCI;
     }
 
+    /**
+     * 通过桥梁名称查询对应的技术状况
+     * @param bridgeName
+     * @return
+     */
     @Override
     public EvaluationInfo getByName(String bridgeName) {
         return null;

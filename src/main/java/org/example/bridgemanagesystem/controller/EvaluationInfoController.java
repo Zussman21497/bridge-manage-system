@@ -1,5 +1,6 @@
 package org.example.bridgemanagesystem.controller;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.extern.slf4j.Slf4j;
 import org.example.bridgemanagesystem.common.R;
 import org.example.bridgemanagesystem.entity.EvaluationInfo;
@@ -13,6 +14,7 @@ import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.*;
 @RestController
 @RequestMapping("/technology/info")
 @Slf4j
+
 public class EvaluationInfoController {
 
     @Autowired
@@ -22,7 +24,7 @@ public class EvaluationInfoController {
      * 根据桥梁 ID 查询技术状况表
      * @param bridgeName
      */
-    @GetMapping("/search")
+    @GetMapping("/search/{bridgeName}")
     public R<EvaluationInfo> searchEvaluationInfo(@PathVariable String bridgeName){
         log.info("查询的桥梁的名称为:{}",bridgeName);
         EvaluationInfo evaluationInfo=evaluationInfoService.getByName(bridgeName);
@@ -39,6 +41,7 @@ public class EvaluationInfoController {
     @PostMapping("/add")
     public void addEvaluationInfo(@RequestBody EvaluationInfo evaluationInfo){
         log.info("添加桥梁技术状况评估表:{}",evaluationInfo);
+        evaluationInfoService.save(evaluationInfo);
     }
 
     /**
