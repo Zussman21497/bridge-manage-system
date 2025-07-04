@@ -1,5 +1,6 @@
 package org.example.bridgemanagesystem.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @TableName("tech_status_evaluation")
 public class EvaluationInfo {
     private String evaluationRecordId;    // 评估记录ID
+    @TableId
     private String bridgeId;              // 桥梁ID
     private String evaluationTime;        // 评估时间
     private String evaluator;             // 评估人员
