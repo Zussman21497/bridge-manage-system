@@ -39,10 +39,10 @@ class EvaluationInfoMapperTest {
         evaluationInfo.setIntegrityStatusLevel("A");
         evaluationInfo.setStructuralConditionLevel("A-");
         evaluationInfo.setTriggerDirectJudgment(true);
-        evaluationInfo.setDamageItems("无");
-        evaluationInfo.setDeductionPoints("0");
-        evaluationInfo.setWeightDistribution("0.0");
-        evaluationInfo.setDamageCauseAnalysis("风吹日晒,龙科均整的");
+//        evaluationInfo.setDamageItems("无");
+//        evaluationInfo.setDeductionPoints("0");
+//        evaluationInfo.setWeightDistribution("0.0");
+//        evaluationInfo.setDamageCauseAnalysis("风吹日晒,龙科均整的");
         evaluationInfo.setMaintenanceCountermeasures("龙科均去修理");
         evaluationInfo.setReinforcementScheme("好好弄");
         evaluationInfo.setTrafficRestrictionMeasures("无");

@@ -3,9 +3,11 @@ package org.example.bridgemanagesystem.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.example.bridgemanagesystem.entity.BridgeDefect;
 import org.example.bridgemanagesystem.entity.BridgeNormalInfo;
 import org.example.bridgemanagesystem.entity.EvaluationInfo;
 import org.example.bridgemanagesystem.mapper.EvaluationInfoMapper;
+import org.example.bridgemanagesystem.service.BridgeDefectService;
 import org.example.bridgemanagesystem.service.BridgeNormalInfoService;
 import org.example.bridgemanagesystem.service.EvaluationInfoService;
 
@@ -32,6 +34,10 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
     private  EvaluationInfoService evaluationInfoService;
     @Autowired
     BridgeNormalInfoServiceImpl b;
+    @Autowired
+    BridgeDefectService defectService;
+    @Autowired
+    private BridgeNormalInfoService bridgeNormalInfoService;
 
     /**
      * 桥面系BCI计算
@@ -41,24 +47,36 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
     @Override
     public double count_bridge_deck_bci(String id) {
         double BCIm;
-        //TODO:后期这些 MDP均由前端输入
 
-        int MDP1=0,MDP2=0,MDP3=0,MDP4=0;
-        if(id=="人行天桥"){
-            BCIm=MDP1*THICKNESSOFDECKPAVEMENT_WEIGHT_R+
-                    MDP2*EXPANSIONJOINT_WEIGHT_R+
-                    MDP3*DRAINAGE_SYSTEM_WEIGHT_R+
-                    MDP4*RAILING_WEIGHT_R;
+        //得到扣分数据
+        QueryWrapper<BridgeDefect> wrapper=new QueryWrapper<BridgeDefect>()
+                .eq("bridge_id",id);
+        BridgeDefect bridgeDefect = defectService.getBaseMapper().selectOne(wrapper);
+        //得到桥梁类型
+        QueryWrapper<BridgeNormalInfo> wrapper1=new QueryWrapper<BridgeNormalInfo>()
+                .eq("bridge_id",id);
+        BridgeNormalInfo bridgeNormalInfo = bridgeNormalInfoService.getBaseMapper().selectOne(wrapper1);
+        String bridgeType=bridgeNormalInfo.getStructureType();
+
+        double MDP1=bridgeDefect.getThicknessOfDeckPavement(),
+                MDP2=bridgeDefect.getExpansionJoint(),
+                MDP3=bridgeDefect.getDrainageSystem(),
+                MDP4=bridgeDefect.getRailing();
+        if(bridgeType.equals("人行天桥")){
+            BCIm=(100-MDP1)*THICKNESSOFDECKPAVEMENT_WEIGHT_R+
+                    (100-MDP2)*EXPANSIONJOINT_WEIGHT_R+
+                    (100-MDP3)*DRAINAGE_SYSTEM_WEIGHT_R+
+                    (100-MDP4)*RAILING_WEIGHT_R;
         }else{
-            int MDP5=0,MDP6=0;
-            BCIm=MDP1*THICKNESSOFDECKPAVEMENT_WEIGHT_E+
-                    MDP2*EXPANSIONJOINT_WEIGHT_E+
-                    MDP3*DRAINAGE_SYSTEM_WEIGHT_E+
-                    MDP4*RAILING_WEIGHT_E+
-                    MDP5*BRIDGEHEAD_WEIGHT_E+
-                    MDP6*CARRIAGEWAY_WEIGHT_E;
+            double MDP5=bridgeDefect.getBridgeHead(),
+                    MDP6=bridgeDefect.getCarriageway();
+            BCIm=(100-MDP1)*THICKNESSOFDECKPAVEMENT_WEIGHT_E+
+                    (100-MDP2)*EXPANSIONJOINT_WEIGHT_E+
+                    (100-MDP3)*DRAINAGE_SYSTEM_WEIGHT_E+
+                    (100-MDP4)*RAILING_WEIGHT_E+
+                    (100-MDP5)*BRIDGEHEAD_WEIGHT_E+
+                    (100-MDP6)*CARRIAGEWAY_WEIGHT_E;
         }
-
         return BCIm;
     }
 
@@ -70,19 +88,39 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
     @Override
     public double count_superstructure_bci(String id) {
         double BCIs;
-        //TODO:后期这些 SDP均由前端输入
-        int SDP1=0,SDP2=0;
-        if(id=="人行天桥"){
-            BCIs=((100-SDP1)*GIRDER_WEIGHT_R+
-                    (100-SDP2)*HORIZONTAL_LINKAGE_WEIGHT_R)
-                    /2;
-        }else {
-            BCIs=((100-SDP1)*GIRDER_WEIGHT_E+
-                    (100-SDP2)*HORIZONTAL_LINKAGE_WEIGHT_E)
-                    /2;
-        }
 
+        //得到扣分数据
+        QueryWrapper<BridgeDefect> wrapper=new QueryWrapper<BridgeDefect>()
+                .eq("bridge_id",id);
+        BridgeDefect bridgeDefect = defectService.getBaseMapper().selectOne(wrapper);
+        //得到桥梁类型
+        QueryWrapper<BridgeNormalInfo> wrapper1=new QueryWrapper<BridgeNormalInfo>()
+                .eq("bridge_id",id);
+        BridgeNormalInfo bridgeNormalInfo = bridgeNormalInfoService.getBaseMapper().selectOne(wrapper1);
+        String bridgeType=bridgeNormalInfo.getStructureType();
+
+        int SDP1=bridgeDefect.getGirder(),
+                SDP2=bridgeDefect.getHorizontalLinkage();
+        if(bridgeType.equals("人行天桥")){
+            BCIs=(100-SDP1)*GIRDER_WEIGHT_R+
+                    (100-SDP2)*HORIZONTAL_LINKAGE_WEIGHT_R;
+        }else {
+            BCIs=(100-SDP1)*GIRDER_WEIGHT_E+
+                    (100-SDP2)*HORIZONTAL_LINKAGE_WEIGHT_E;
+        }
         return BCIs;
+    }
+
+    @Override
+    public double count_superstructure_bsi(String id) {
+        double BSIs;
+        QueryWrapper<BridgeDefect> wrapper=new QueryWrapper<BridgeDefect>()
+                .eq("bridge_id",id);
+        BridgeDefect bridgeDefect = defectService.getBaseMapper().selectOne(wrapper);
+        int SDP1=bridgeDefect.getGirder(),
+                SDP2=bridgeDefect.getHorizontalLinkage();
+
+        return SDP1-SDP2>=0?(100-SDP2):(100-SDP1);
     }
 
     /**
@@ -93,8 +131,25 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
     @Override
     public double count_substructure_bci(String id) {
         double BCIx;
-        int SDP1=0,SDP2=0,SDP3=0,SDP4=0,SDP5=0,SDP6=0,SDP7=0,SDP8=0;
-        if(id=="人行天桥"){
+        //得到扣分数据
+        QueryWrapper<BridgeDefect> wrapper=new QueryWrapper<BridgeDefect>()
+                .eq("bridge_id",id);
+        BridgeDefect bridgeDefect = defectService.getBaseMapper().selectOne(wrapper);
+        //得到桥梁类型
+        QueryWrapper<BridgeNormalInfo> wrapper1=new QueryWrapper<BridgeNormalInfo>()
+                .eq("bridge_id",id);
+        BridgeNormalInfo bridgeNormalInfo = bridgeNormalInfoService.getBaseMapper().selectOne(wrapper1);
+        String bridgeType=bridgeNormalInfo.getStructureType();
+
+        int SDP1=bridgeDefect.getPierDimensions(),
+                SDP2=bridgeDefect.getPierBody(),
+                SDP3=bridgeDefect.getPierBaseElevation(),
+                SDP4=bridgeDefect.getPierSupport(),
+                SDP5=bridgeDefect.getAbutmentDimensions(),
+                SDP6=bridgeDefect.getAbutmentBody(),
+                SDP7=bridgeDefect.getAbutmentBaseElevation(),
+                SDP8=bridgeDefect.getAbutmentSupport();
+        if(bridgeType.equals("人行天桥")){
             BCIx=((100-SDP1)*PIER_DIMENSIONS_WEIGHT_R+
                     (100-SDP2)*PIER_BODY_WEIGHT_R+
                     (100-SDP3)*PIER_BASEELEVATION_WEIGHT_R+
@@ -102,7 +157,7 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
                     (100-SDP5)*ABUTMENT_CAP_WEIGHT_R+
                     (100-SDP6)*ABUTMENT_BODY_WEIGHT_R+
                     (100-SDP7)*ABUTMENT_BASEELEVATION_WEIGHT_R+
-                    (100-SDP8)*ABUTMENT_SUPPORT_WEIGHT_R)/8;
+                    (100-SDP8)*ABUTMENT_SUPPORT_WEIGHT_R)/2;
         }else {
             BCIx=((100-SDP1)*PIER_DIMENSIONS_WEIGHT_E+
                     (100-SDP2)*PIER_BODY_WEIGHT_E+
@@ -111,9 +166,33 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
                     (100-SDP5)*ABUTMENT_CAP_WEIGHT_E+
                     (100-SDP6)*ABUTMENT_BODY_WEIGHT_E+
                     (100-SDP7)*ABUTMENT_BASEELEVATION_WEIGHT_E+
-                    (100-SDP8)*ABUTMENT_SUPPORT_WEIGHT_E)/8;
+                    (100-SDP8)*ABUTMENT_SUPPORT_WEIGHT_E)/2;
         }
         return BCIx;
+    }
+
+    @Override
+    public double count_substructure_bsi(String id) {
+        double BSIx;
+        QueryWrapper<BridgeDefect> wrapper=new QueryWrapper<BridgeDefect>()
+                .eq("bridge_id",id);
+        BridgeDefect bridgeDefect = defectService.getBaseMapper().selectOne(wrapper);
+        int[] SDP=new int[8];
+        SDP[1]=bridgeDefect.getPierDimensions();
+        SDP[2]=bridgeDefect.getPierBody();
+        SDP[3]=bridgeDefect.getPierBaseElevation();
+        SDP[4]=bridgeDefect.getPierSupport();
+        SDP[5]=bridgeDefect.getAbutmentDimensions();
+        SDP[6]=bridgeDefect.getAbutmentBody();
+        SDP[7]=bridgeDefect.getAbutmentBaseElevation();
+        SDP[0]=bridgeDefect.getAbutmentSupport();
+        int min=101;
+        for (int i = 0; i < SDP.length; i++) {
+            if(SDP[i]<min) min=SDP[i];
+        }
+        BSIx=(100-min);
+
+        return BSIx;
     }
 
     /**
@@ -131,12 +210,17 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         /*
         TODO:这个ID到时候从数据库里面查对应的桥梁分类
          */
-        if (id=="人行天桥"){
+        QueryWrapper<BridgeNormalInfo> wrapper1=new QueryWrapper<BridgeNormalInfo>()
+                .eq("bridge_id",id);
+        BridgeNormalInfo bridgeNormalInfo = bridgeNormalInfoService.getBaseMapper().selectOne(wrapper1);
+        String bridgeType=bridgeNormalInfo.getStructureType();
+
+        if (bridgeType.equals("人行天桥")){
             BCI=BCIm*BRIDGE_DECK_SYSTEM_WEIGHT_R+
                     BCIs*SUPERSTRUCTURE_WEIGHT_R+
                     BCIx*SUBSTRUCTURE_WEIGHT_R;
         }else {
-            if(id=="拱桥"){
+            if(bridgeType.equals("拱桥")){
                 BCI=BCIm*BRIDGE_DECK_SYSTEM_WEIGHT_G+
                         BCIs*SUPERSTRUCTURE_WEIGHT_G+
                         BCIx*SUBSTRUCTURE_WEIGHT_G;
@@ -149,6 +233,36 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         }
 
         return BCI;
+    }
+
+    @Override
+    public String judge_bci(double BCI) {
+        String c="E";
+        if(BCI>=90){
+            c="A";
+        } else if (BCI>=80){
+            c="B";
+        } else if (BCI>=66) {
+            c="C";
+        } else if (BCI>=50) {
+            c="D";
+        }
+        return c;
+    }
+
+    @Override
+    public String judge_bsi(double BSI) {
+        String c="E";
+        if(BSI>=90){
+            c="A";
+        } else if (BSI>=80){
+            c="B";
+        } else if (BSI>=66) {
+            c="C";
+        } else if (BSI>=50) {
+            c="D";
+        }
+        return c;
     }
 
 

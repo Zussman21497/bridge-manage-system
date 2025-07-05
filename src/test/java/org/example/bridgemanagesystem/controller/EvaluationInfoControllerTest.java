@@ -1,8 +1,13 @@
 package org.example.bridgemanagesystem.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.example.bridgemanagesystem.dto.EvaluationInfoDTO;
+import org.example.bridgemanagesystem.entity.BridgeNormalInfo;
 import org.example.bridgemanagesystem.entity.EvaluationInfo;
+import org.example.bridgemanagesystem.service.BridgeNormalInfoService;
+import org.example.bridgemanagesystem.service.EvaluationInfoService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,32 +21,17 @@ class EvaluationInfoControllerTest {
 
     @Test
     void testAddEvaluationInfo() {
-        EvaluationInfo evaluationInfo=new EvaluationInfo();
-        evaluationInfo.setEvaluationRecordId("003");
-        evaluationInfo.setBridgeId("BR003");
-        evaluationInfo.setEvaluationTime("20250705");
-        evaluationInfo.setEvaluator("龙科均_大孩版");
-        evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_E);
-        evaluationInfo.setSuperstructureWeight(SUPERSTRUCTURE_WEIGHT_E);
-        evaluationInfo.setSubstructureWeight(SUBSTRUCTURE_WEIGHT_E);
-        evaluationInfo.setDeckBci(94);
-        evaluationInfo.setSuperstructureBci(94);
-        evaluationInfo.setSuperstructureBsi(92);
-        evaluationInfo.setSubstructureBci(96);
-        evaluationInfo.setSubstructureBsi(95);
-        evaluationInfo.setWholeBridgeBci(96);
-        evaluationInfo.setIntegrityStatusLevel("A");
-        evaluationInfo.setStructuralConditionLevel("A-");
-        evaluationInfo.setTriggerDirectJudgment(true);
-        evaluationInfo.setDamageItems("无");
-        evaluationInfo.setDeductionPoints("0");
-        evaluationInfo.setWeightDistribution("0.0");
-        evaluationInfo.setDamageCauseAnalysis("风吹日晒,龙科均_大孩版整的");
-        evaluationInfo.setMaintenanceCountermeasures("龙科均_大孩版去修理");
-        evaluationInfo.setReinforcementScheme("好好弄");
-        evaluationInfo.setTrafficRestrictionMeasures("无");
+        EvaluationInfoDTO evaluationInfoDTO=new EvaluationInfoDTO();
+        evaluationInfoDTO.setEvaluationRecordId("001");
+        evaluationInfoDTO.setBridgeId("BR003");
+        evaluationInfoDTO.setEvaluationTime("20250705");
+        evaluationInfoDTO.setEvaluator("龙科均_小孩版");
+        evaluationInfoDTO.setTriggerDirectJudgment(true);
+        evaluationInfoDTO.setMaintenanceCountermeasures("龙科均_小孩版去修理");
+        evaluationInfoDTO.setReinforcementScheme("再多浇点混泥土");
+        evaluationInfoDTO.setTrafficRestrictionMeasures("江津区车辆不许走");
 
-        e.addEvaluationInfo(evaluationInfo);
+       e.addEvaluationInfo(evaluationInfoDTO);
     }
 
     @Test
@@ -51,9 +41,9 @@ class EvaluationInfoControllerTest {
 
     @Test
     void testUpdateEvaluationInfo() {
-        EvaluationInfo evaluationInfo=new EvaluationInfo();
-        evaluationInfo.setBridgeId("BR002");
-        evaluationInfo.setEvaluator("大大龙");
-        e.updateEvaluationInfo(evaluationInfo);
+        EvaluationInfoDTO evaluationInfoDTO=new EvaluationInfoDTO();
+        evaluationInfoDTO.setBridgeId("BR003");
+        evaluationInfoDTO.setEvaluator("大大龙");
+        e.updateEvaluationInfo(evaluationInfoDTO);
     }
 }
