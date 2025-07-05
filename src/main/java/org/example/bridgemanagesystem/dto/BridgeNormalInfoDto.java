@@ -1,21 +1,16 @@
-package org.example.bridgemanagesystem.entity;
+package org.example.bridgemanagesystem.dto;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 
-//桥梁一般资料表
-public class BridgeNormalInfo {
+//桥梁一般资料表Dto
+public class BridgeNormalInfoDto {
 
-    @TableId
-    private String bridgeId;                       // 桥梁ID
     private String bridgeName;                     // 桥梁名称
     private String managementUnit;                 // 管理单位
     private String maintenanceUnit;                // 养护单位
@@ -45,4 +40,3 @@ public class BridgeNormalInfo {
     private Integer normalWaterLevel;              // 常水位
 
 }
-
