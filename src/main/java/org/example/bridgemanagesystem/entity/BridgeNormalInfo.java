@@ -1,5 +1,6 @@
 package org.example.bridgemanagesystem.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 
 //桥梁一般资料表
 public class BridgeNormalInfo {
-
+    @TableId
     private String bridgeId;                       // 桥梁ID
     private String bridgeName;                     // 桥梁名称
     private String managementUnit;                 // 管理单位

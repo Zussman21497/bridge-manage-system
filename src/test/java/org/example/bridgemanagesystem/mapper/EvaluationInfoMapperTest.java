@@ -24,7 +24,7 @@ class EvaluationInfoMapperTest {
     void testInsert() {
         EvaluationInfo evaluationInfo=new EvaluationInfo();
         evaluationInfo.setEvaluationRecordId("012");
-        evaluationInfo.setBridgeId("B001");
+        evaluationInfo.setBridgeId("BR001");
         evaluationInfo.setEvaluationTime("20250704");
         evaluationInfo.setEvaluator("龙科均");
         evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_E);
@@ -39,10 +39,10 @@ class EvaluationInfoMapperTest {
         evaluationInfo.setIntegrityStatusLevel("A");
         evaluationInfo.setStructuralConditionLevel("A-");
         evaluationInfo.setTriggerDirectJudgment(true);
-        evaluationInfo.setDamageItems("无");
-        evaluationInfo.setDeductionPoints("0");
-        evaluationInfo.setWeightDistribution("0.0");
-        evaluationInfo.setDamageCauseAnalysis("风吹日晒,龙科均整的");
+//        evaluationInfo.setDamageItems("无");
+//        evaluationInfo.setDeductionPoints("0");
+//        evaluationInfo.setWeightDistribution("0.0");
+//        evaluationInfo.setDamageCauseAnalysis("风吹日晒,龙科均整的");
         evaluationInfo.setMaintenanceCountermeasures("龙科均去修理");
         evaluationInfo.setReinforcementScheme("好好弄");
         evaluationInfo.setTrafficRestrictionMeasures("无");
