@@ -17,7 +17,6 @@ public class BridgeNormalInfoServiceImpl extends ServiceImpl<BridgeNormalInfoMap
         BridgeNormalInfo info = baseMapper.selectOne(
                 new LambdaQueryWrapper<BridgeNormalInfo>().eq(BridgeNormalInfo::getBridgeName, bridgeName)
         );
-
         return info;
     }
 
