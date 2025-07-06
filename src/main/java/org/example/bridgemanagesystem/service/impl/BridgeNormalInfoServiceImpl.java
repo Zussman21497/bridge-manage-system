@@ -20,5 +20,11 @@ public class BridgeNormalInfoServiceImpl extends ServiceImpl<BridgeNormalInfoMap
         return info;
     }
 
+    @Override
+    public List<String> getAllBridgeNames(){
+        List<String> list = baseMapper.getAllBridgeNames();
+        return list;
+    }
+
 
 }
