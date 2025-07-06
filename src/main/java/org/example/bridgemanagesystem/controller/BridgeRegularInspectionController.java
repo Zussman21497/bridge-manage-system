@@ -64,4 +64,8 @@ public class BridgeRegularInspectionController {
 
     }
 
+    public R<String> updateRegularInspection(@RequestBody RegularInspectionDataDto dto)
+
+
+
 }

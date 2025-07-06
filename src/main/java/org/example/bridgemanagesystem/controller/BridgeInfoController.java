@@ -38,6 +38,7 @@ public class BridgeInfoController {
      * 查询所有桥梁名称返回给前端的下拉框
      * @return
      */
+    @GetMapping("/searchBridgeNames")
     public R<List<String>> searchBridgeNames(){
         List<String> list = bridgeNormalInfoService.getAllBridgeNames();
 
