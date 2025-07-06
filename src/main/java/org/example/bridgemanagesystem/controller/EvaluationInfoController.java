@@ -34,7 +34,10 @@ public class EvaluationInfoController {
     public R<EvaluationInfo> searchEvaluationInfo(@PathVariable String bridgeName){
         log.info("查询的桥梁的名称为:{}",bridgeName);
         EvaluationInfo evaluationInfo=evaluationInfoService.getByName(bridgeName);
-        return R.success(evaluationInfo);
+        if(evaluationInfo!=null){
+            return R.success(evaluationInfo);
+        }
+        return R.error("查询桥梁技术评估失败!!");
     }
 
 
@@ -43,7 +46,7 @@ public class EvaluationInfoController {
      * @param
      */
     @PostMapping("/add")
-    public void addEvaluationInfo(@RequestBody EvaluationInfoDTO evaluationInfoDTO){
+    public R<String> addEvaluationInfo(@RequestBody EvaluationInfoDTO evaluationInfoDTO){
         log.info("添加桥梁技术状况评估表:{}",evaluationInfoDTO);
         System.out.println();
         System.out.println();
@@ -57,6 +60,9 @@ public class EvaluationInfoController {
         System.out.println();
         //查询桥梁的类型
         BridgeNormalInfo info = b.getById(evaluationInfo.getBridgeId());
+        if(info==null){
+            return R.error("找不到此桥梁数据");
+        }
         String id=info.getBridgeId();
         String bridgeType=info.getStructureType();
 
@@ -96,7 +102,11 @@ public class EvaluationInfoController {
         evaluationInfo.setIntegrityStatusLevel(evaluationInfoService.judge_bci(bci));
         evaluationInfo.setStructuralConditionLevel(evaluationInfoService.judge_bsi((bsis+bsix)/2));
 
-        evaluationInfoService.save(evaluationInfo);
+        boolean save = evaluationInfoService.save(evaluationInfo);
+        if(!save){
+            R.error("添加失败");
+        }
+        return R.success("添加成功!");
     }
 
     /**
@@ -104,7 +114,7 @@ public class EvaluationInfoController {
      * @param
      */
     @PutMapping("/update")
-    public void updateEvaluationInfo(@RequestBody EvaluationInfoDTO evaluationInfoDTO){
+    public R<String> updateEvaluationInfo(@RequestBody EvaluationInfoDTO evaluationInfoDTO){
         log.info("新桥梁技术状况信息:{}",evaluationInfoDTO);
         String id = evaluationInfoDTO.getBridgeId();
         QueryWrapper<EvaluationInfo> wrapper=new QueryWrapper<EvaluationInfo>()
@@ -114,6 +124,9 @@ public class EvaluationInfoController {
         BeanUtils.copyProperties(evaluationInfoDTO,evaluationInfo);
         //查询桥梁的类型
         BridgeNormalInfo info = b.getById(evaluationInfo.getBridgeId());
+        if(info==null){
+            return R.error("找不到对应的桥梁数据!");
+        }
         String bridgeType=info.getStructureType();
 
         //根据桥梁类型设置权重
@@ -151,7 +164,11 @@ public class EvaluationInfoController {
         evaluationInfo.setIntegrityStatusLevel(evaluationInfoService.judge_bci(bci));
         evaluationInfo.setStructuralConditionLevel(evaluationInfoService.judge_bsi((bsis+bsix)/2));
 
-        evaluationInfoService.update(evaluationInfo,wrapper);
+        boolean update = evaluationInfoService.update(evaluationInfo, wrapper);
+        if (!update){
+            return R.error("更新失败!");
+        }
+        return R.success("更新数据成功!");
     }
 
 }

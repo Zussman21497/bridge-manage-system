@@ -15,7 +15,7 @@ class BridgeDefectControllerTest {
 
     @Test
     void searchDefect() {
-        bridgeDefectController.searchDefect("长江大桥");
+        bridgeDefectController.searchDefect("黄河大桥");
     }
 
     @Test
