@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 //桥梁附挂管线表Dto
 public class BridgePipelineDto {
 
-
+    private String bridgeId;                       // 桥梁ID
     private String waterSupplyPipe;            // 给水管
     private String gasPipe;                    // 燃气管
     private String powerCable;                 // 电力缆

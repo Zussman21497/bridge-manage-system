@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 //桥梁附属工程表Dto
 public class BridgeOtherWorkDto {
 
+    private String bridgeId;                             // 桥梁ID
     private String catchmentOpeningDimensions;          // 集水口尺寸
     private Double numberOfCatchmentOpenings;           // 集水口数量
     private String drainPipeDimensions;                 // 泄水管尺寸

@@ -1,5 +1,7 @@
 package org.example.bridgemanagesystem.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 //桥梁附属工程表
 public class BridgeOtherWork {
 
+    @TableId(type = IdType.INPUT)
     private String bridgeId;                            // 桥梁ID
     private String catchmentOpeningDimensions;          // 集水口尺寸
     private Double numberOfCatchmentOpenings;           // 集水口数量
