@@ -6,7 +6,6 @@ import org.example.bridgemanagesystem.entity.RegularInspectionData;
 import org.example.bridgemanagesystem.service.RegularInspectionDataService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -64,7 +63,7 @@ public class BridgeRegularInspectionController {
 
     }
 
-    public R<String> updateRegularInspection(@RequestBody RegularInspectionDataDto dto)
+//    public R<String> updateRegularInspection(@RequestBody RegularInspectionDataDto dto)
 
 
 
