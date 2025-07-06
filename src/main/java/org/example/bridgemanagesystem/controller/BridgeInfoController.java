@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/bridge")
@@ -30,6 +32,22 @@ public class BridgeInfoController {
 
     @Autowired
     private BridgePipelineService bridgePipelineService;
+
+
+    /**
+     * 查询所有桥梁名称返回给前端的下拉框
+     * @return
+     */
+    public R<List<String>> searchBridgeNames(){
+        List<String> list = bridgeNormalInfoService.getAllBridgeNames();
+
+        if(list == null){
+            return R.error("未获取到桥梁名称");
+        }
+
+        return R.success(list);
+
+    }
 
 
     /**
