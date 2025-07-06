@@ -6,7 +6,6 @@ import org.example.bridgemanagesystem.entity.RegularInspectionData;
 import org.example.bridgemanagesystem.service.RegularInspectionDataService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -63,5 +62,26 @@ public class BridgeRegularInspectionController {
                 : R.error("日常巡察表添加失败！");
 
     }
+
+    /**
+     * 定期检查表更新
+     * @param dto
+     * @return
+     */
+    @PutMapping("/update")
+    public R<String> updateRegularInspection(@RequestBody RegularInspectionDataDto dto){
+
+        RegularInspectionData data = new RegularInspectionData();
+        BeanUtils.copyProperties(dto, data);
+
+        boolean isUpdated = regularInspectionDataService.updateById(data);
+
+        return isUpdated
+                ? R.success("定期检查表更新成功！")
+                : R.error("定期检查表更新失败！");
+
+    }
+
+
 
 }
