@@ -11,7 +11,10 @@ import java.util.List;
 public interface BridgeNormalInfoMapper extends BaseMapper<BridgeNormalInfo> {
 
 
+    //获取所有桥梁名称
     @Select("SELECT bridge_name FROM bridge_normal_info")
     List<String> getAllBridgeNames();
+
+
 
 }
