@@ -33,6 +33,9 @@ public class BridgeInfoController {
     @Autowired
     private BridgePipelineService bridgePipelineService;
 
+    @Autowired
+    private  BridgeSummaryInfoService bridgeSummaryInfoService;
+
 
     /**
      * 查询所有桥梁名称返回给前端的下拉框
@@ -49,6 +52,24 @@ public class BridgeInfoController {
         return R.success(list);
 
     }
+
+    /**
+     * 把桥梁名称，结构类型，建成年月传给前端
+     * @return
+     */
+    @GetMapping("/searchSummaryInfo")
+    public R<List<BridgeSummaryInfo>> searchSummaryInfo(){
+
+        List<BridgeSummaryInfo> list = bridgeSummaryInfoService.getBridgeSummary();
+
+        if(list == null){
+            return R.error("获取桥梁简易信息失败！");
+        }
+
+        return R.success(list);
+
+    }
+
 
 
     /**
