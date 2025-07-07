@@ -18,6 +18,11 @@ public class BridgeSummaryInfoServiceImpl extends ServiceImpl<BridgeSummaryInfoM
     public List<BridgeSummaryInfo> getBridgeSummary(){
         List<BridgeSummaryInfo> list = baseMapper.getBridgeSummary();
 
+        if (list != null && !list.isEmpty()) {
+            System.out.println("第一条数据的 bridgeId：" + list.get(0).getBridgeId());
+        } else {
+            System.out.println("查询结果为空");
+        }
         return list;
     }
 
