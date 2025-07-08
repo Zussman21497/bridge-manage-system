@@ -15,6 +15,10 @@ public interface BridgeNormalInfoMapper extends BaseMapper<BridgeNormalInfo> {
     @Select("SELECT bridge_name FROM bridge_normal_info")
     List<String> getAllBridgeNames();
 
+    //获取所有桥梁类型
+    @Select("SELECT structure_type FROM bridge_normal_info")
+    List<String> getAllBridgeTypes();
+
 
 
 }
