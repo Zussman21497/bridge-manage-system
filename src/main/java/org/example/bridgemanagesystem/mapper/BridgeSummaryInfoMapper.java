@@ -12,7 +12,7 @@ public interface BridgeSummaryInfoMapper extends BaseMapper<BridgeSummaryInfo> {
 
 
     //获取桥梁名称，结构类型，建成年月
-    @Select("SELECT bridge_name, structure_type, completion_date FROM bridge_normal_info")
+    @Select("SELECT bridge_id, bridge_name, structure_type, completion_date FROM bridge_normal_info")
     List<BridgeSummaryInfo> getBridgeSummary();
 
 }

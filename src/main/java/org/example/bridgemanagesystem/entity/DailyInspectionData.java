@@ -1,5 +1,9 @@
 package org.example.bridgemanagesystem.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,32 +11,19 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//日常巡检表
+// 桥梁巡检主表
+@TableName("bridge_inspection")
 public class DailyInspectionData {
-    private String inspectionID;                          // 巡检记录 ID
-    private String bridgeName;                            // 桥梁名称
-    private String inspectionUnit;                        // 巡检单位
-    private String bridgeNameplate;                       // 桥梁铭牌情况
-    private String heightLimitSign;                       // 限高标志情况
-    private String weightLimitSign;                       // 限重标志情况
-    private String vehicleLane;                           // 车行道情况
-    private String sidewalk;                              // 人行道情况
-    private String expansionJoint;                        // 伸缩缝情况
-    private String railing;                               // 护栏情况
-    private String drainageFacilities;                    // 排水设施情况
-    private String bridgeRoadConnectionPoint;             // 桥梁与道路连接点情况
-    private String superstructure;                        // 上部结构情况
-    private String bearing;                               // 支座情况
-    private String substructure;                          // 下部结构情况
-    private Boolean intact;                               // 桥梁是否完好（true = 完好，false = 有问题）
-    private String damageType;                            // 损坏类型（如裂缝、变形等）
-    private String damageDegree;                          // 损坏程度（轻微、中等、严重）
-    private String damageLocation;                        // 损坏位置描述
-    private String remarks;                               // 备注信息
-    private String constructionWithinBridgeProtectionArea; // 桥梁保护区内施工情况
-    private String otherHazards;                          // 其他安全隐患
-    private String inspector;                             // 巡检人
-    private String inspectionTime;                        // 巡检时间（建议格式 yyyy-MM-dd）
-    private String weather;                               // 当时天气情况
+    @TableId(value = "id",type = IdType.AUTO)
+    private String inspectionId;                // 巡检记录ID
+    private String bridgeName;                  // 桥梁名称
+    private String bridgeCode;                  // 桥梁编号
+//    private String roadName;                    // 所在道路名称
+    private String inspectionDate;              // 巡检日期（格式：yyyy-MM-dd）
+    private String inspector;                   // 巡检人员
+    private String inspectionUnit;              // 巡检单位
+    private String weather;                     // 天气情况
+    private Integer overallStatus;              // 总体状况（1:良好，2:一般，3:较差，4:危险）
+//    private String createTime;                  // 创建时间
+//    private String updateTime;                  // 更新时间
 }
-

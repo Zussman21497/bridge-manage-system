@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -44,13 +45,10 @@ public class BridgeInfoController {
     @GetMapping("/searchBridgeNames")
     public R<List<String>> searchBridgeNames(){
         List<String> list = bridgeNormalInfoService.getAllBridgeNames();
-
         if(list == null){
             return R.error("未获取到桥梁名称");
         }
-
         return R.success(list);
-
     }
 
     /**
@@ -203,51 +201,67 @@ public class BridgeInfoController {
      * @return
      */
     @PostMapping("/info/add")
-    @Transactional
-    public R<String> addBridgeFullInfo(@RequestBody BridgeFullInfoDto bridgeFullInfoDto){
+// 关键：指定异常回滚（所有异常都回滚），确保数据一致性
+    @Transactional(rollbackFor = Exception.class)
+    public R<String> addBridgeFullInfo(@RequestBody BridgeFullInfoDto bridgeFullInfoDto) {
+        try {
+            // 1. 校验参数完整性
+            if (bridgeFullInfoDto == null
+                    || bridgeFullInfoDto.getBridgeNormalInfoDto() == null
+                    || bridgeFullInfoDto.getBridgeOtherWorkDto() == null
+                    || bridgeFullInfoDto.getBridgePipelineDto() == null
+                    || bridgeFullInfoDto.getBridgeSuperstructureDto() == null
+                    || bridgeFullInfoDto.getBridgeSubstructureDto() == null) {
+                return R.error("表单数据不完整！");
+            }
 
-        if (bridgeFullInfoDto == null
-                || bridgeFullInfoDto.getBridgeNormalInfoDto() == null
-                || bridgeFullInfoDto.getBridgeOtherWorkDto() == null
-                || bridgeFullInfoDto.getBridgePipelineDto() == null
-                || bridgeFullInfoDto.getBridgeSuperstructureDto() == null
-                || bridgeFullInfoDto.getBridgeSubstructureDto() == null) {
+            // 2. 生成唯一桥梁ID（核心改进点）
+            // 使用UUID确保各表数据关联到同一桥梁
+            String bridgeId = UUID.randomUUID().toString().replaceAll("-", "");
 
-            return R.error("表单数据不完整！");
+            // 3. 为所有DTO设置统一的bridgeId（关键步骤）
+            // 确保桥梁一般资料表的ID
+            bridgeFullInfoDto.getBridgeNormalInfoDto().setBridgeId(bridgeId);
+            // 确保上部结构表的ID与桥梁一致
+            bridgeFullInfoDto.getBridgeSuperstructureDto().setBridgeId(bridgeId);
+            // 确保下部结构表的ID与桥梁一致
+            bridgeFullInfoDto.getBridgeSubstructureDto().setBridgeId(bridgeId);
+            // 确保附属工程表的ID与桥梁一致
+            bridgeFullInfoDto.getBridgeOtherWorkDto().setBridgeId(bridgeId);
+            // 确保附挂管线表的ID与桥梁一致
+            bridgeFullInfoDto.getBridgePipelineDto().setBridgeId(bridgeId);
+
+            // 4. 转换DTO为实体并保存（简化判断逻辑）
+            // 桥梁一般资料
+            BridgeNormalInfo bridgeNormalInfo = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeNormalInfoDto());
+            bridgeNormalInfoService.save(bridgeNormalInfo);
+
+            // 桥梁附属工程
+            BridgeOtherWork bridgeOtherWork = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeOtherWorkDto());
+            bridgeOtherWorkService.save(bridgeOtherWork);
+
+            // 桥梁附挂管线
+            BridgePipeline bridgePipeline = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgePipelineDto());
+            bridgePipelineService.save(bridgePipeline);
+
+            // 桥梁上部结构
+            BridgeSuperstructure bridgeSuperstructure = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeSuperstructureDto());
+            bridgeSuperstructureService.save(bridgeSuperstructure);
+
+            // 桥梁下部结构
+            BridgeSubstructure bridgeSubstructure = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeSubstructureDto());
+            bridgeSubstructureService.save(bridgeSubstructure);
+
+            // 5. 所有保存成功返回
+            return R.success("添加成功！");
+
+        } catch (Exception e) {
+            // 6. 捕获异常并打印日志（方便排查问题）
+            // 注意：实际项目中使用日志框架（如Slf4j）替代System.out
+            e.printStackTrace();
+            // 事务会自动回滚（因@Transactional配置）
+            return R.error("服务器内部错误：" + e.getMessage());
         }
-
-
-        //分给桥梁一般资料
-        BridgeNormalInfo bridgeNormalInfo = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeNormalInfoDto());
-        boolean nor = bridgeNormalInfoService.save(bridgeNormalInfo);
-
-
-        //分给桥梁附属工程
-        BridgeOtherWork bridgeOtherWork = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeOtherWorkDto());
-        boolean other = bridgeOtherWorkService.save(bridgeOtherWork);
-
-        //分给桥梁附挂管线
-        BridgePipeline bridgePipeline = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgePipelineDto());
-         boolean pipe = bridgePipelineService.save(bridgePipeline);
-
-
-        //分给桥梁上部结构
-        BridgeSuperstructure bridgeSuperstructure = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeSuperstructureDto());
-        boolean supe = bridgeSuperstructureService.save(bridgeSuperstructure);
-
-        //分给桥梁下部结构
-        BridgeSubstructure bridgeSubstructure = BridgeConverter.toEntity(bridgeFullInfoDto.getBridgeSubstructureDto());
-        boolean sub = bridgeSubstructureService.save(bridgeSubstructure);
-
-        if (!nor) return R.error("桥梁一般资料保存失败！");
-        if (!other) return R.error("桥梁附属工程保存失败！");
-        if (!pipe) return R.error("桥梁附挂管线保存失败！");
-        if (!supe) return R.error("桥梁上部结构保存失败！");
-        if (!sub) return R.error("桥梁下部结构保存失败！");
-
-        return R.success("添加成功！");
-
-
     }
 
 

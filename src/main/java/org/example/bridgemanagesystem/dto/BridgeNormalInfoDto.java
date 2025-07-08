@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 //桥梁一般资料表Dto
 public class BridgeNormalInfoDto {
 
+    private String bridgeId;                       // 桥梁ID
     private String bridgeName;                     // 桥梁名称
     private String managementUnit;                 // 管理单位
     private String maintenanceUnit;                // 养护单位
