@@ -20,8 +20,7 @@ public class DailyInspectionItem {
     private String damageDegree;                // 损坏程度（轻微、中等、严重）
     private Integer damageQuantity;             // 损坏数量
     private String damagePosition;              // 损坏位置
-    private String damageDescription;           // 损坏描述
-    private String repairSuggestion;            // 修复建议
-    private String createTime;                  // 创建时间
-    private String updateTime;                  // 更新时间
+    private String remark;                      // 备注
+//    private String createTime;                  // 创建时间
+//    private String updateTime;                  // 更新时间
 }

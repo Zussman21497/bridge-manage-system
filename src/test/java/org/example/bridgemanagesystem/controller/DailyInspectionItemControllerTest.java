@@ -33,8 +33,7 @@ class DailyInspectionItemControllerTest {
         d.setDamageDegree("");
         d.setDamageQuantity(0);
         d.setDamagePosition("");
-        d.setDamageDescription("");
-        d.setRepairSuggestion("");
+        d.setRemark("");
         dList.add(d);
 
         d0.addDailyInspectionItem(dList);

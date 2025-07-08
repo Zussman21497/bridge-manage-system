@@ -28,14 +28,12 @@ class BridgeDailyInspectionControllerTest {
         data.setInspectionId("4");
         data.setBridgeName("重庆大桥");
         data.setBridgeCode("2");
-        data.setRoadName("黄明路");
+//        data.setRoadName("黄明路");
         data.setInspectionDate("2025-07-07");
         data.setInspector("龙科均");
         data.setInspectionUnit("长生桥桥梁检测站");
         data.setWeather("雷阵雨");
-        data.setTemperature("24°C");
         data.setOverallStatus(1);
-        data.setRemark("无");
         allDto.setDailyInspectionData(data);
 
         List<DailyInspectionItem> dList=new ArrayList<>();
@@ -49,8 +47,7 @@ class BridgeDailyInspectionControllerTest {
         d.setDamageDegree("");
         d.setDamageQuantity(0);
         d.setDamagePosition("");
-        d.setDamageDescription("");
-        d.setRepairSuggestion("");
+        d.setRemark("");
         dList.add(d);
 
         allDto.setDailyInspectionItems(dList);
@@ -58,4 +55,8 @@ class BridgeDailyInspectionControllerTest {
         b.addDailyInspection(allDto);
     }
 
+    @Test
+    void searchSomeDailyInspection() {
+        b.searchSomeDailyInspection();
+    }
 }

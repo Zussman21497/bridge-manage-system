@@ -40,7 +40,6 @@ public class EvaluationInfoController {
         return R.error("查询桥梁技术评估失败!!");
     }
 
-
     /**
      * 新添桥梁技术状况表
      * @param
@@ -171,4 +170,7 @@ public class EvaluationInfoController {
         return R.success("更新数据成功!");
     }
 
+    /**
+     *
+     */
 }
