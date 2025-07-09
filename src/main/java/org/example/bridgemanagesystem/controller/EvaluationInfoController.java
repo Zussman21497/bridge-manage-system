@@ -54,8 +54,12 @@ public class EvaluationInfoController {
         System.out.println();
         System.out.println();
         //创建Info类,将DTO拷贝到Info里面
+        String name=evaluationInfoDTO.getBridgeName();
+        evaluationInfoDTO.setBridgeId(b.getInfoByName(name).getBridgeId());
+
         EvaluationInfo evaluationInfo=new EvaluationInfo();
         BeanUtils.copyProperties(evaluationInfoDTO,evaluationInfo);
+
         log.info("拷贝后的数据:{}",evaluationInfo);
         System.out.println();
         System.out.println(evaluationInfo.getBridgeId());
@@ -115,63 +119,63 @@ public class EvaluationInfoController {
      * 更新桥梁技术状况表信息
      * @param
      */
-    @PutMapping("/update")
-    public R<String> updateEvaluationInfo(@RequestBody EvaluationInfoDTO evaluationInfoDTO){
-        log.info("新桥梁技术状况信息:{}",evaluationInfoDTO);
-        String id = evaluationInfoDTO.getBridgeId();
-        QueryWrapper<EvaluationInfo> wrapper=new QueryWrapper<EvaluationInfo>()
-                .eq("bridge_id",id);
-
-        EvaluationInfo evaluationInfo=new EvaluationInfo();
-        BeanUtils.copyProperties(evaluationInfoDTO,evaluationInfo);
-        //查询桥梁的类型
-        BridgeNormalInfo info = b.getById(evaluationInfo.getBridgeId());
-        if(info==null){
-            return R.error("找不到对应的桥梁数据!");
-        }
-        String bridgeType=info.getStructureType();
-
-        //根据桥梁类型设置权重
-        if(bridgeType.equals("人行天桥")){
-            evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_R);
-            evaluationInfo.setSuperstructureWeight(SUPERSTRUCTURE_WEIGHT_R);
-            evaluationInfo.setSubstructureWeight(SUBSTRUCTURE_WEIGHT_R);
-        }
-        else if (bridgeType.equals("拱桥")) {
-            evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_G);
-            evaluationInfo.setSuperstructureWeight(SUPERSTRUCTURE_WEIGHT_G);
-            evaluationInfo.setSubstructureWeight(SUBSTRUCTURE_WEIGHT_G);
-        }
-        else {
-            evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_E);
-            evaluationInfo.setSuperstructureWeight(SUPERSTRUCTURE_WEIGHT_E);
-            evaluationInfo.setSubstructureWeight(SUBSTRUCTURE_WEIGHT_E);
-        }
-        //计算BCI,BSI等相关数据
-        double bcim,bcis,bcix,bsis,bsix,bci;
-        bcim=evaluationInfoService.count_bridge_deck_bci(id);
-        bcis=evaluationInfoService.count_superstructure_bci(id);
-        bsis=evaluationInfoService.count_superstructure_bsi(id);
-        bcix=evaluationInfoService.count_substructure_bci(id);
-        bsix=evaluationInfoService.count_substructure_bsi(id);
-        bci=evaluationInfoService.count_bridge_BCI(id);
-
-        evaluationInfo.setDeckBci(bcim);
-        evaluationInfo.setSuperstructureBci(bcis);
-        evaluationInfo.setSuperstructureBsi(bsis);
-        evaluationInfo.setSubstructureBci(bcix);
-        evaluationInfo.setSubstructureBsi(bsix);
-        evaluationInfo.setWholeBridgeBci(bci);
-
-        evaluationInfo.setIntegrityStatusLevel(evaluationInfoService.judge_bci(bci));
-        evaluationInfo.setStructuralConditionLevel(evaluationInfoService.judge_bsi((bsis+bsix)/2));
-
-        boolean update = evaluationInfoService.update(evaluationInfo, wrapper);
-        if (!update){
-            return R.error("更新失败!");
-        }
-        return R.success("更新数据成功!");
-    }
+//    @PutMapping("/update")
+//    public R<String> updateEvaluationInfo(@RequestBody EvaluationInfoDTO evaluationInfoDTO){
+//        log.info("新桥梁技术状况信息:{}",evaluationInfoDTO);
+//        String id = evaluationInfoDTO.getBridgeId();
+//        QueryWrapper<EvaluationInfo> wrapper=new QueryWrapper<EvaluationInfo>()
+//                .eq("bridge_id",id);
+//
+//        EvaluationInfo evaluationInfo=new EvaluationInfo();
+//        BeanUtils.copyProperties(evaluationInfoDTO,evaluationInfo);
+//        //查询桥梁的类型
+//        BridgeNormalInfo info = b.getById(evaluationInfo.getBridgeId());
+//        if(info==null){
+//            return R.error("找不到对应的桥梁数据!");
+//        }
+//        String bridgeType=info.getStructureType();
+//
+//        //根据桥梁类型设置权重
+//        if(bridgeType.equals("人行天桥")){
+//            evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_R);
+//            evaluationInfo.setSuperstructureWeight(SUPERSTRUCTURE_WEIGHT_R);
+//            evaluationInfo.setSubstructureWeight(SUBSTRUCTURE_WEIGHT_R);
+//        }
+//        else if (bridgeType.equals("拱桥")) {
+//            evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_G);
+//            evaluationInfo.setSuperstructureWeight(SUPERSTRUCTURE_WEIGHT_G);
+//            evaluationInfo.setSubstructureWeight(SUBSTRUCTURE_WEIGHT_G);
+//        }
+//        else {
+//            evaluationInfo.setBridgeDeckSystemWeight(BRIDGE_DECK_SYSTEM_WEIGHT_E);
+//            evaluationInfo.setSuperstructureWeight(SUPERSTRUCTURE_WEIGHT_E);
+//            evaluationInfo.setSubstructureWeight(SUBSTRUCTURE_WEIGHT_E);
+//        }
+//        //计算BCI,BSI等相关数据
+//        double bcim,bcis,bcix,bsis,bsix,bci;
+//        bcim=evaluationInfoService.count_bridge_deck_bci(id);
+//        bcis=evaluationInfoService.count_superstructure_bci(id);
+//        bsis=evaluationInfoService.count_superstructure_bsi(id);
+//        bcix=evaluationInfoService.count_substructure_bci(id);
+//        bsix=evaluationInfoService.count_substructure_bsi(id);
+//        bci=evaluationInfoService.count_bridge_BCI(id);
+//
+//        evaluationInfo.setDeckBci(bcim);
+//        evaluationInfo.setSuperstructureBci(bcis);
+//        evaluationInfo.setSuperstructureBsi(bsis);
+//        evaluationInfo.setSubstructureBci(bcix);
+//        evaluationInfo.setSubstructureBsi(bsix);
+//        evaluationInfo.setWholeBridgeBci(bci);
+//
+//        evaluationInfo.setIntegrityStatusLevel(evaluationInfoService.judge_bci(bci));
+//        evaluationInfo.setStructuralConditionLevel(evaluationInfoService.judge_bsi((bsis+bsix)/2));
+//
+//        boolean update = evaluationInfoService.update(evaluationInfo, wrapper);
+//        if (!update){
+//            return R.error("更新失败!");
+//        }
+//        return R.success("更新数据成功!");
+//    }
 
     /**
      * 查询所有桥梁的BCI值

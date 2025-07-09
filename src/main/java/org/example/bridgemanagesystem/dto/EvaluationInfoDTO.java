@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EvaluationInfoDTO {
     private String evaluationRecordId;          // 评估记录ID
+    private String bridgeName;                  // 桥梁名称
     private String bridgeId;                    // 桥梁ID
     private String evaluationTime;              // 评估时间
     private String evaluator;                   // 评估人员
