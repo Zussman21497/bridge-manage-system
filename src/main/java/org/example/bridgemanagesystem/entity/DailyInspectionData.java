@@ -17,7 +17,8 @@ public class DailyInspectionData {
     @TableId(value = "id",type = IdType.AUTO)
     private String inspectionId;                // 巡检记录ID
     private String bridgeName;                  // 桥梁名称
-    private String bridgeCode;                  // 桥梁编号
+    @TableField("bridge_code")
+    private String bridgeId;                  // 桥梁编号
 //    private String roadName;                    // 所在道路名称
     private String inspectionDate;              // 巡检日期（格式：yyyy-MM-dd）
     private String inspector;                   // 巡检人员

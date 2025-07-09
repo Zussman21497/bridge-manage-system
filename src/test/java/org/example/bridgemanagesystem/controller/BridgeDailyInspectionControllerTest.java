@@ -27,7 +27,7 @@ class BridgeDailyInspectionControllerTest {
         DailyInspectionData data=new DailyInspectionData();
         data.setInspectionId("4");
         data.setBridgeName("重庆大桥");
-        data.setBridgeCode("2");
+//        data.setBridgeCode("2");
 //        data.setRoadName("黄明路");
         data.setInspectionDate("2025-07-07");
         data.setInspector("龙科均");
@@ -39,7 +39,7 @@ class BridgeDailyInspectionControllerTest {
         List<DailyInspectionItem> dList=new ArrayList<>();
         DailyInspectionItem d=new DailyInspectionItem();
         d.setId("");
-        d.setRecordId(data.getBridgeCode());
+        d.setRecordId(data.getBridgeId());
         d.setItemName("人行道");
         d.setItemCategory("a");
         d.setIsGood(true);
