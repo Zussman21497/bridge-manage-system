@@ -90,29 +90,6 @@ public class BridgeDailyInspectionController {
      * @param dto
      * @return
      */
-//    @PostMapping("/add")
-//    public R<String> addDailyInspection(@RequestBody BridgeDailyAllDto dto) {
-//
-//        if (dto == null) {
-//            return R.error("表单数据为空！");
-//        }
-//
-//        DailyInspectionData data = dto.getDailyInspectionData();
-//        List<DailyInspectionItem> dailyInspectionItems=dto.getDailyInspectionItems();
-//        String id = data.getInspectionId();
-//        dailyInspectionItems.forEach(dailyInspectionItem -> {
-//            dailyInspectionItem.setRecordId(id);
-//        });
-//
-//        d.addDailyInspectionItem(dailyInspectionItems);
-//        boolean isAdded = dailyInspectionDataService.save(data);
-//
-//        return isAdded
-//                ? R.success("添加日常巡查表成功！")
-//                : R.error("添加日常巡查表失败！");
-//
-//    }
-//
     @Autowired
     IService<DailyInspectionItem> dailyInspectionItemService;
     @PostMapping("/add")

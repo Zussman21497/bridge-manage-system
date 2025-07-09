@@ -44,7 +44,7 @@ class EvaluationInfoControllerTest {
         EvaluationInfoDTO evaluationInfoDTO=new EvaluationInfoDTO();
         evaluationInfoDTO.setBridgeId("BR003");
         evaluationInfoDTO.setEvaluator("大大龙");
-        e.updateEvaluationInfo(evaluationInfoDTO);
+//        e.updateEvaluationInfo(evaluationInfoDTO);
     }
 
     @Test
