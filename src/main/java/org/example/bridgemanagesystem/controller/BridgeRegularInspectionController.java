@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.example.bridgemanagesystem.common.R;
 import org.example.bridgemanagesystem.dto.RegularInspectionDataDto;
 import org.example.bridgemanagesystem.entity.BridgeDefect;
+import org.example.bridgemanagesystem.entity.BridgeNormalInfo;
 import org.example.bridgemanagesystem.entity.RegularInspectionData;
 import org.example.bridgemanagesystem.service.BridgeDefectService;
 import org.example.bridgemanagesystem.service.BridgeNormalInfoService;
@@ -82,8 +83,13 @@ public class BridgeRegularInspectionController {
         RegularInspectionData regularInspectionData=dto.getRegularInspectionData();
 
         String bridgeName=regularInspectionData.getBridgeName();
-        String id=b.getInfoByName(bridgeName).getBridgeId();
+        BridgeNormalInfo name = b.getInfoByName(bridgeName);
+        if(name==null){
+            return R.error("没有此桥梁,无法添加检查表");
+        }
+        String id= name.getBridgeId();
 
+        regularInspectionData.setBridgeId(id);
         BridgeDefect defect=dto.getBridgeDefect();
         defect.setBridgeId(id);
 

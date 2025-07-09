@@ -5,8 +5,10 @@ import org.example.bridgemanagesystem.common.R;
 import org.example.bridgemanagesystem.dto.BridgeDailyAllDto;
 import org.example.bridgemanagesystem.dto.DailyInspectionDataDto;
 import org.example.bridgemanagesystem.dto.SomeDailyInfoDto;
+import org.example.bridgemanagesystem.entity.BridgeNormalInfo;
 import org.example.bridgemanagesystem.entity.DailyInspectionData;
 import org.example.bridgemanagesystem.entity.DailyInspectionItem;
+import org.example.bridgemanagesystem.service.BridgeNormalInfoService;
 import org.example.bridgemanagesystem.service.DailyInspectionDataService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class BridgeDailyInspectionController {
 
     @Autowired
     private DailyInspectionItemController d;
+
+    @Autowired
+    private BridgeNormalInfoService b;
     /**
      * 日常检查表查询所有
      *
@@ -44,6 +49,7 @@ public class BridgeDailyInspectionController {
         if (id == null || id.trim().isEmpty()) {
             return R.error("巡检记录 ID 为空");
         }
+
         R<List<DailyInspectionItem>> listR = d.searchDailyInspectionItem(id);
         if (listR == null || listR.getData() == null) {
             return R.error("未找到检查项数据");
@@ -115,30 +121,33 @@ public class BridgeDailyInspectionController {
             return R.error("表单数据为空！");
         }
 
-        // 1. 先保存主记录（此时数据库会自动生成inspectionId）
         DailyInspectionData data = dto.getDailyInspectionData();
+        String bridgeName = data.getBridgeName();
+        BridgeNormalInfo info=b.getInfoByName(bridgeName);
+        if (info==null){
+            return R.error("没有此桥梁,无法添加");
+        }
+        String id=info.getBridgeId();
+        data.setBridgeId(id);
+
         boolean isMainSaved = dailyInspectionDataService.save(data);
         if (!isMainSaved) {
             return R.error("添加主记录失败！");
         }
 
-        // 2. 从已保存的主记录中获取自动生成的inspectionId
         String inspectionId = data.getInspectionId();
         if (inspectionId == null) {
             return R.error("主记录ID生成失败！");
         }
 
-        // 3. 为检查项设置正确的record_id（关联主记录ID）
         List<DailyInspectionItem> dailyInspectionItems = dto.getDailyInspectionItems();
         dailyInspectionItems.forEach(item -> {
-            item.setRecordId(inspectionId); // 此时inspectionId已生成，不再为null
+            item.setRecordId(inspectionId);
         });
-
-        // 4. 保存检查项（此时record_id已正确赋值）
 
         boolean isItemsSaved = dailyInspectionItemService.saveBatch(dailyInspectionItems);
         if (!isItemsSaved) {
-            throw new RuntimeException("检查项保存失败"); // 触发事务回滚
+            throw new RuntimeException("检查项保存失败");
         }
 
         return R.success("添加日常巡查表及检查项成功！");
