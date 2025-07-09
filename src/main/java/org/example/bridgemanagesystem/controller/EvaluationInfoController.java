@@ -12,6 +12,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.*;
 
 
@@ -171,6 +174,15 @@ public class EvaluationInfoController {
     }
 
     /**
-     *
+     * 查询所有桥梁的BCI值
      */
+    @GetMapping("/bci")
+    public R<List<Integer>> searchBridgeBCI(){
+
+        List<Integer> list=evaluationInfoService.getBridgeBCI();
+        if (list!=null){
+            return R.success(list);
+        }
+        return R.error("查询失败!");
+    }
 }

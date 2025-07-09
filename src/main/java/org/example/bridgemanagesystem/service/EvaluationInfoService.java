@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.bridgemanagesystem.dto.EvaluationInfoDTO;
 import org.example.bridgemanagesystem.entity.EvaluationInfo;
 
+import java.util.List;
+
 public interface EvaluationInfoService extends IService<EvaluationInfo> {
     /*
     计算桥面系 BCI值
@@ -42,4 +44,6 @@ public interface EvaluationInfoService extends IService<EvaluationInfo> {
     根据桥梁名称查询桥梁技术状况评估表
      */
     EvaluationInfo getByName(String bridgeName);
+
+    List<Integer> getBridgeBCI();
 }
