@@ -15,6 +15,8 @@ import org.example.bridgemanagesystem.service.EvaluationInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.*;
 import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.BRIDGE_DECK_SYSTEM_WEIGHT_E;
 import static org.example.bridgemanagesystem.commondata.BridgeBCICommonData.BRIDGE_DECK_SYSTEM_WEIGHT_G;
@@ -280,7 +282,11 @@ public class EvaluationInfoServiceImpl extends ServiceImpl<EvaluationInfoMapper,
         return evaluationInfoService.getBaseMapper().selectOne(wrapper);
     }
 
-
+    @Override
+    public List<Integer> getBridgeBCI() {
+        List<Integer> list=baseMapper.getBridgeBCI();
+        return list;
+    }
 
 
 }

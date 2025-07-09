@@ -7,20 +7,14 @@ import org.example.bridgemanagesystem.mapper.RegularInspectionDataMapper;
 import org.example.bridgemanagesystem.service.RegularInspectionDataService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RegularInspectionDataServiceImpl extends ServiceImpl<RegularInspectionDataMapper, RegularInspectionData> implements RegularInspectionDataService {
 
-    /**
-     * 根据桥梁名称查定期巡查表
-     * @param bridgeName
-     * @return
-     */
-    public RegularInspectionData searchRegularInspectionByName(String bridgeName){
-        RegularInspectionData data = baseMapper.selectOne(
-                new LambdaQueryWrapper<RegularInspectionData>().eq(RegularInspectionData::getBridgeName, bridgeName)
-        );
-
-        return data;
+    @Override
+    public List<RegularInspectionData> searchAll() {
+        List<RegularInspectionData> list=baseMapper.searchAll();
+        return list;
     }
-
 }

@@ -19,8 +19,8 @@ public class MonitoringPlanService {
         // 环境分析
         String env = dto.getEnvironment();
         String envRisk = switch (env) {
-            case "山区" -> "高风险";
-            case "城市" -> "中等风险";
+            case "城市" -> "高风险";
+            case "山区" -> "中等风险";
             case "沿海" -> "高湿腐蚀";
             default -> "未知环境";
         };

@@ -63,9 +63,7 @@ public class BridgeInfoController {
         if(list == null){
             return R.error("获取桥梁简易信息失败！");
         }
-
         return R.success(list);
-
     }
 
 

@@ -46,4 +46,9 @@ class EvaluationInfoControllerTest {
         evaluationInfoDTO.setEvaluator("大大龙");
         e.updateEvaluationInfo(evaluationInfoDTO);
     }
+
+    @Test
+    void searchBridgeBCI() {
+        e.searchBridgeBCI();
+    }
 }
